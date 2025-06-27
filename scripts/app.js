@@ -1,5 +1,25 @@
 import { initRouter } from './router.js';
 
+export const appState = {
+  currentRoute: 'home',
+  games: {},           // Dynamisch importierte Module
+  customSets: {},      // Nutzerdefinierte Wort-/Kategorien-Sets
+  settings: {          // z.B. Sprache, Timer-Defaults
+    language: 'de',
+    defaultTimer: 60,
+  },
+};
+
+const listeners = [];
+export function onStateChange(fn) {
+  listeners.push(fn);
+}
+export function setState(updates) {
+  Object.assign(appState, updates);
+  listeners.forEach(fn => fn(appState));
+}
+
+
 function renderHome() {
   document.getElementById('app').innerHTML = `
     <h2>Spiele-Auswahl</h2>
